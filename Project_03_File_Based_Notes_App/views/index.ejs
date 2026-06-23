@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Task Manager</title>
+</head>
+
+<body class="bg-zinc-950 text-white">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+
+        <div class="mb-10">
+            <h1 class="text-5xl font-bold tracking-tight">
+                Task Manager
+            </h1>
+
+            <p class="text-zinc-400 mt-2">
+                Create, manage and organize your tasks.
+            </p>
+        </div>
+
+        <% if(deleted) { %>
+            <div id="success-message" class="bg-green-500/20 border border-green-500 text-green-400 px-5 py-3 rounded-xl mb-6">
+                File deleted successfully ✅
+            </div>
+        <% } %>
+
+        <!-- Create Task Form -->
+
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-2xl">
+            <form action="/create" method="post" class="space-y-4">
+
+                <input
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
+                    type="text"
+                    placeholder="Task Title"
+                    name="title"
+                >
+
+                <textarea
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 outline-none resize-none h-32 focus:border-blue-500"
+                    placeholder="Write task details..."
+                    name="details"
+                ></textarea>
+
+                <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 transition px-6 py-3 rounded-xl font-medium cursor-pointer"
+                >
+                    Create Task
+                </button>
+
+            </form>
+        </div>
+
+        <!-- Tasks Grid -->
+
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <% if(files.length > 0){ %>
+
+                <% files.forEach(function(val){ %>
+
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 hover:border-blue-500 transition">
+
+                        <h2 class="text-xl font-semibold text-white break-words">
+                            <%= val %>
+                        </h2>
+
+                        <div class="flex items-center gap-4 mt-5">
+
+                            <a class="text-blue-400 hover:text-blue-300" href="/file/<%= val %>">
+                                Read More →
+                            </a>
+
+                            <form action="/file/<%= val %>?_method=DELETE" method="POST">
+                                <button type="submit" class="text-red-400 hover:text-red-300 cursor-pointer">
+                                    Delete
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            <% } else { %>
+
+                <div class="col-span-full bg-zinc-900 border border-dashed border-zinc-700 rounded-2xl p-10 text-center">
+
+                    <h2 class="text-2xl font-semibold">
+                        No Tasks Yet
+                    </h2>
+
+                    <p class="text-zinc-400 mt-2">
+                        Create your first task above.
+                    </p>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="../javascript/script.js"></script>
+</body>
+
+</html>
