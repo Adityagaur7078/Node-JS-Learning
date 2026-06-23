@@ -75,6 +75,10 @@
                                 Read More →
                             </a>
 
+                            <a class="text-blue-400 hover:text-blue-300" href="/edit/<%= val %>">
+                                Edit File Name
+                            </a>
+
                             <form action="/file/<%= val %>?_method=DELETE" method="POST">
                                 <button type="submit" class="text-red-400 hover:text-red-300 cursor-pointer">
                                     Delete

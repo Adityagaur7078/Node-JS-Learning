@@ -27,12 +27,30 @@ app.get("/", function(req, res) {
 app.post("/create", function(req, res) {
 
     fs.writeFile(
-        `./files/${req.body.title.split(" ").join(" ")}.txt`,
+        `./files/${req.body.title.split(" ").join("-")}.txt`,
         req.body.details,
         function(err) {
 
             res.redirect("/");
 
+        }
+    );
+
+});
+
+app.get("/edit/:filename", function(req, res) {
+    res.render("edit", { filename: req.params.filename})
+});
+
+app.patch("/edit/:filename", function(req, res) {
+
+    fs.rename(`./files/${req.params.filename}`, `./files/${req.body.newName}.txt`, function(err) {
+
+            if (err) {
+                return res.send("Error renaming file");
+            }
+
+            res.redirect("/");
         }
     );
 

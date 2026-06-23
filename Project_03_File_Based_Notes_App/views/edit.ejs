@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Edit File Name</title>
+</head>
+
+<body class="bg-zinc-950 text-white">
+
+    <div class="max-w-4xl mx-auto px-6 py-12">
+        <a href="/" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 mb-8">
+            ← Back to Home
+        </a>
+
+        <form action="/edit/<%= filename %>?_method=PATCH" method="POST" class="space-y-4">
+
+                <input
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
+                    type="text"
+                    placeholder="Previous Name"
+                    name="previousName"
+                    readonly
+                    value="<%= filename %>"
+                >
+
+                <input
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
+                    type="text"
+                    placeholder="Enter New File Name"
+                    name="newName"
+                >
+
+                <button
+                    type="submit"
+                    class="bg-yellow-600 hover:bg-blue-700 transition px-6 py-3 rounded-xl font-medium cursor-pointer"
+                >
+                    Update
+                </button>
+            </form>
+
+    </div>
+
+</body>
+
+</html>
