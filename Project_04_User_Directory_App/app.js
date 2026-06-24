@@ -36,9 +36,34 @@ app.get("/read", async (req, res) => {
     });
 });
 
+app.get("/edit/:id", async (req, res) => {
+
+    let user = await userModel.findOne({_id: req.params.id});
+
+    res.render("edit", { user });
+});
+
+app.post("/update/:id", async (req, res) => {
+    const { name, email, image } = req.body;
+
+    let editUser = await userModel.findByIdAndUpdate(
+        req.params.id,
+        {
+            name,
+            email,
+            image
+        },
+        {
+            returnDocument: "after"
+        }
+    );
+
+    res.redirect("/read");
+});
+
 app.get("/delete/:id", async (req, res) => {
 
-    await userModel.findOneAndDelete({
+    let users = await userModel.findOneAndDelete({
         _id: req.params.id,
     });
 
