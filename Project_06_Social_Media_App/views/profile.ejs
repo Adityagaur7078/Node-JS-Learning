@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Profile</title>
+</head>
+
+<body class="bg-zinc-950 text-white">
+
+    <div class="w-full min-h-screen">
+
+        <!-- Navbar -->
+
+        <nav class="flex justify-between items-center px-8 py-6 border-b border-zinc-800">
+
+            <h1 class="text-3xl font-bold">
+                Mini Social
+            </h1>
+
+            <a
+                href="/logout"
+                class="bg-red-600 hover:bg-red-700 px-5 py-2 rounded-xl transition">
+
+                Logout
+
+            </a>
+
+        </nav>
+
+        <!-- Main -->
+
+        <div class="max-w-5xl mx-auto p-8">
+
+            <!-- Welcome -->
+
+            <div class="mb-8">
+
+                <h1 class="text-4xl font-bold">
+
+                    Hello,
+                    <span class="text-blue-500">
+                        <%= user.name %>
+                    </span>
+
+                    👋
+
+                </h1>
+
+                <h5 class="text-zinc-400 mt-2 text-lg">
+
+                    Share what's on your mind.
+
+                </h5>
+
+            </div>
+
+            <!-- Create Post -->
+
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl">
+
+                <form action="/createPost" method="post" class="space-y-5">
+
+                    <textarea
+                        name="content"
+                        rows="5"
+                        placeholder="What's on your mind?"
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-5 py-4 outline-none resize-none focus:border-blue-500 transition"></textarea>
+
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-semibold transition cursor-pointer">
+
+                        Create New Post
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- Posts -->
+
+            <div class="mt-10">
+
+                <h3 class="text-3xl font-bold mb-6">
+
+                    Your Posts
+
+                </h3>
+
+                <!-- Single Post -->
+
+                <% user.posts.reverse().forEach(function(post){ %>
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-lg">
+
+                            <h4 class="text-blue-500 text-lg font-semibold"> <%= user.username %> </h4>
+
+                            <p class="text-zinc-300 mt-4 leading-7"> <%= post.content %> </p>
+                            
+
+                        <div class="flex gap-4 mt-6">
+                            <small><%= post.likes.length %></small>
+
+                            <a
+                                href="/like/<%= post._id %>"
+                                class="bg-pink-600 hover:bg-pink-700 px-5 py-2 rounded-xl transition">
+
+                                <%= post.likes.some(id => id.equals(user._id)) ? "Unlike" : "❤️ Like" %>
+
+                            </a>
+
+                            <a
+                                href="/edit/<%= post._id %>"
+                                class="bg-yellow-500 hover:bg-yellow-600 text-black px-5 py-2 rounded-xl transition">
+
+                                ✏️ Edit
+
+                            </a>
+
+                        </div>
+
+                    </div>
+                <% }) %>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

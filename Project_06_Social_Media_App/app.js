@@ -45,8 +45,68 @@ app.get('/login', (req, res) => {
 });
 
 // Profile Page (Protected Route)
-app.get('/profile', isLoggedIn, (req, res) => {
-    res.render('login');
+app.get('/profile', isLoggedIn, async (req, res) => {
+    const user = await userModel.findOne({ email: req.user.email }).populate("posts")
+    res.render('profile', { user });
+});
+
+// Like Route
+
+app.get('/like/:id', isLoggedIn, async (req, res) => {
+    const post = await postModel.findOne({ _id: req.params.id }).populate("user");
+
+    const liked = post.likes.findIndex(id => id.equals(req.user.userid));
+
+    if (liked === -1) {
+        post.likes.push(req.user.userid);
+    } else {
+        post.likes.splice(liked, 1);
+    }
+
+
+    await post.save();
+    res.redirect('/profile');
+});
+
+app.post('/createPost', isLoggedIn, async (req, res) => {
+    const user = await userModel.findOne({ email: req.user.email });
+    let { content } = req.body;
+    let post = await postModel.create({
+        user: user._id,
+        content: content
+    });
+
+    user.posts.push(post._id);
+    await user.save();
+
+    res.redirect("/profile");
+});
+
+// Edit Post Route
+
+app.get("/edit/:id", isLoggedIn, async (req, res) => {
+
+    const post = await postModel.findById(req.params.id);
+
+    if (!post.user.equals(req.user.userid)) {
+        return res.status(403).send("Unauthorized");
+    }
+
+    res.render("edit", { post });
+});
+
+app.post("/edit/:id", isLoggedIn, async (req, res) => {
+
+    const post = await postModel.findById(req.params.id);
+
+    if (!post.user.equals(req.user.userid)) {
+        return res.status(403).send("Unauthorized");
+    }
+
+    post.content = req.body.content;
+    await post.save();
+
+    res.redirect("/profile");
 });
 
 
@@ -61,7 +121,7 @@ app.post('/register', async (req, res) => {
 
     let user = await userModel.findOne({ email });
 
-    if (user) return res.status(500).send("User already registered");
+    if (user) return res.status(409).redirect("/login");
 
     bcrypt.genSalt(10, (err, salt) => {
 
@@ -76,13 +136,17 @@ app.post('/register', async (req, res) => {
             });
 
             let token = jwt.sign(
-                { email: email, userid: user._id },
+                {
+                    email: createdUser.email,
+                    userid: createdUser._id
+                },
                 "secret"
             );
 
             res.cookie("token", token);
 
             res.send("registered");
+
         });
 
     });
@@ -104,13 +168,13 @@ app.post('/login', async (req, res) => {
         if (result) {
 
             let token = jwt.sign(
-                { email: email, usedid: user._id },
+                { email: email, userid: user._id },
                 "secret"
             );
 
             res.cookie("token", token);
 
-            res.status(200).send("you can login");
+            res.status(200).redirect("/profile");
 
         } else {
 
@@ -126,9 +190,8 @@ app.post('/login', async (req, res) => {
 // User Logout
 app.get('/logout', (req, res) => {
 
-    res.cookie("token", "");
-
-    res.redirect('/login');
+    res.clearCookie("token");
+    res.redirect("/login");
 
 });
 
@@ -140,20 +203,17 @@ app.get('/logout', (req, res) => {
 // Authentication Middleware
 function isLoggedIn(req, res, next) {
 
-    if (req.cookies.token === "") {
-
-        res.send("You must be logged in");
-
-    } else {
-
-        let data = jwt.verify(req.cookie.token, "secret");
-
-        req.user = data;
-
-        next();
-
+    if (!req.cookies.token) {
+        return res.redirect("/login");
     }
 
+    try {
+        let data = jwt.verify(req.cookies.token, "secret");
+        req.user = data;
+        next();
+    } catch (err) {
+        return res.redirect("/login");
+    }
 }
 
 
