@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,120 +10,297 @@
 
 <body class="bg-zinc-950 text-white">
 
-    <div class="w-full min-h-screen">
+    <!-- ========================= -->
+    <!-- Navbar -->
+    <!-- ========================= -->
 
-        <!-- Navbar -->
+    <nav class="border-b border-zinc-800 bg-zinc-900/70 backdrop-blur">
 
-        <nav class="flex justify-between items-center px-8 py-6 border-b border-zinc-800">
+        <div class="max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
 
-            <h1 class="text-3xl font-bold">
+            <h1 class="text-3xl font-bold tracking-tight">
                 Mini Social
             </h1>
 
-            <a
-                href="/logout"
-                class="bg-red-600 hover:bg-red-700 px-5 py-2 rounded-xl transition">
+            <div class="flex items-center gap-3">
 
-                Logout
+                <a
+                    href="/profile/upload"
+                    class="bg-blue-600 hover:bg-blue-700 transition px-5 py-2 rounded-xl font-semibold">
 
-            </a>
+                    Update Picture
 
-        </nav>
+                </a>
 
-        <!-- Main -->
+                <a
+                    href="/logout"
+                    class="bg-red-600 hover:bg-red-700 transition px-5 py-2 rounded-xl font-semibold">
 
-        <div class="max-w-5xl mx-auto p-8">
+                    Logout
 
-            <!-- Welcome -->
+                </a>
 
-            <div class="mb-8">
+            </div>
 
-                <h1 class="text-4xl font-bold">
+        </div>
 
-                    Hello,
-                    <span class="text-blue-500">
+    </nav>
+
+    <!-- ========================= -->
+    <!-- Main -->
+    <!-- ========================= -->
+
+    <div class="max-w-7xl mx-auto px-6 py-10">
+
+        <div class="grid lg:grid-cols-3 gap-8">
+
+            <!-- ========================= -->
+            <!-- Left Profile Card -->
+            <!-- ========================= -->
+
+            <div>
+
+                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 sticky top-8">
+
+                    <div class="flex justify-center">
+
+                        <img
+                            src="/images/upload/<%= user.profilePic %>"
+                            alt="Profile"
+                            class="w-40 h-40 rounded-full object-cover border-4 border-blue-500 shadow-xl">
+
+                    </div>
+
+                    <h1 class="text-3xl font-bold text-center mt-6">
                         <%= user.name %>
-                    </span>
+                    </h1>
 
-                    👋
+                    <h3 class="text-blue-500 text-center text-lg mt-1">
+                        @<%= user.username %>
+                    </h3>
 
-                </h1>
+                    <p class="text-zinc-400 text-center mt-3 break-all">
+                        <%= user.email %>
+                    </p>
 
-                <h5 class="text-zinc-400 mt-2 text-lg">
+                    <p class="text-zinc-400 text-center mt-2">
+                        Age :
+                        <span class="text-white font-semibold">
+                            <%= user.age %>
+                        </span>
+                    </p>
 
-                    Share what's on your mind.
+                    <div class="grid grid-cols-2 gap-4 mt-8">
 
-                </h5>
+                        <div class="bg-zinc-800 rounded-2xl py-5 text-center">
 
-            </div>
+                            <h2 class="text-3xl font-bold text-blue-500">
+                                <%= user.posts.length %>
+                            </h2>
 
-            <!-- Create Post -->
+                            <p class="text-zinc-400 mt-1">
+                                Posts
+                            </p>
 
-            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl">
+                        </div>
 
-                <form action="/createPost" method="post" class="space-y-5">
+                        <div class="bg-zinc-800 rounded-2xl py-5 text-center">
 
-                    <textarea
-                        name="content"
-                        rows="5"
-                        placeholder="What's on your mind?"
-                        class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-5 py-4 outline-none resize-none focus:border-blue-500 transition"></textarea>
+                            <h2 class="text-3xl font-bold text-pink-500">
 
-                    <button
-                        type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-semibold transition cursor-pointer">
+                                <%= user.posts.reduce((total, post)=> total + post.likes.length, 0) %>
 
-                        Create New Post
+                            </h2>
 
-                    </button>
-
-                </form>
-
-            </div>
-
-            <!-- Posts -->
-
-            <div class="mt-10">
-
-                <h3 class="text-3xl font-bold mb-6">
-
-                    Your Posts
-
-                </h3>
-
-                <!-- Single Post -->
-
-                <% user.posts.reverse().forEach(function(post){ %>
-                    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-lg">
-
-                            <h4 class="text-blue-500 text-lg font-semibold"> <%= user.username %> </h4>
-
-                            <p class="text-zinc-300 mt-4 leading-7"> <%= post.content %> </p>
-                            
-
-                        <div class="flex gap-4 mt-6">
-                            <small><%= post.likes.length %></small>
-
-                            <a
-                                href="/like/<%= post._id %>"
-                                class="bg-pink-600 hover:bg-pink-700 px-5 py-2 rounded-xl transition">
-
-                                <%= post.likes.some(id => id.equals(user._id)) ? "Unlike" : "❤️ Like" %>
-
-                            </a>
-
-                            <a
-                                href="/edit/<%= post._id %>"
-                                class="bg-yellow-500 hover:bg-yellow-600 text-black px-5 py-2 rounded-xl transition">
-
-                                ✏️ Edit
-
-                            </a>
+                            <p class="text-zinc-400 mt-1">
+                                Likes
+                            </p>
 
                         </div>
 
                     </div>
-                <% }) %>
+
+                    <a
+                        href="/profile/upload"
+                        class="block text-center mt-8 bg-blue-600 hover:bg-blue-700 transition py-3 rounded-xl font-semibold">
+
+                        Change Profile Picture
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- ========================= -->
+            <!-- Right Content -->
+            <!-- ========================= -->
+
+            <div class="lg:col-span-2 space-y-8">
+
+                <!-- Welcome -->
+
+                <div>
+
+                    <h1 class="text-5xl font-bold">
+
+                        Welcome,
+
+                        <span class="text-blue-500">
+                            <%= user.name %>
+                        </span>
+
+                        👋
+
+                    </h1>
+
+                    <p class="text-zinc-400 text-lg mt-3">
+
+                        Share your thoughts with everyone.
+
+                    </p>
+
+                </div>
+
+                <!-- ========================= -->
+                <!-- Create Post -->
+                <!-- ========================= -->
+
+                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+
+                    <h2 class="text-2xl font-bold mb-5">
+
+                        Create New Post
+
+                    </h2>
+
+                    <form
+                        action="/createPost"
+                        method="POST"
+                        class="space-y-5">
+
+                        <textarea
+                            name="content"
+                            rows="6"
+                            placeholder="What's on your mind today?"
+                            class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl p-5 outline-none resize-none focus:border-blue-500 transition"></textarea>
+
+                        <button
+                            class="bg-blue-600 hover:bg-blue-700 transition px-7 py-3 rounded-xl font-semibold cursor-pointer">
+
+                            Create Post
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <!-- ========================= -->
+                <!-- Posts -->
+                <!-- ========================= -->
+
+                <div>
+
+                    <h2 class="text-3xl font-bold mb-6">
+
+                        Your Posts
+
+                    </h2>
+
+                    <% if(user.posts.length===0){ %>
+
+                        <div class="bg-zinc-900 border border-dashed border-zinc-700 rounded-3xl py-20 text-center">
+
+                            <h2 class="text-3xl font-bold">
+
+                                No Posts Yet
+
+                            </h2>
+
+                            <p class="text-zinc-400 mt-3">
+
+                                Write your first post above.
+
+                            </p>
+
+                        </div>
+
+                    <% } else { %>
+
+                        <div class="space-y-6">
+
+                            <% [...user.posts].reverse().forEach(function(post){ %>
+
+                                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 hover:border-blue-500 transition">
+
+                                    <div class="flex items-center gap-4">
+
+                                        <img
+                                            src="/images/upload/<%= user.profilePic %>"
+                                            class="w-14 h-14 rounded-full object-cover border-2 border-blue-500">
+
+                                        <div>
+
+                                            <h3 class="font-bold text-xl">
+
+                                                <%= user.name %>
+
+                                            </h3>
+
+                                            <p class="text-blue-500">
+
+                                                @<%= user.username %>
+
+                                            </p>
+
+                                            <small class="text-zinc-500">
+
+                                                <%= post.date.toDateString() %>
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                    <p class="mt-6 leading-8 text-zinc-300 whitespace-pre-wrap">
+
+                                        <%= post.content %>
+
+                                    </p>
+
+                                    <div class="flex items-center gap-4 mt-8">
+
+                                        <a
+                                            href="/like/<%= post._id %>"
+                                            class="bg-pink-600 hover:bg-pink-700 transition px-5 py-2 rounded-xl">
+
+                                            <%= post.likes.some(id => id.equals(user._id)) ? "💔 Unlike" : "❤️ Like" %>
+
+                                            (<%= post.likes.length %>)
+
+                                        </a>
+
+                                        <a
+                                            href="/edit/<%= post._id %>"
+                                            class="bg-yellow-500 hover:bg-yellow-600 text-black transition px-5 py-2 rounded-xl font-semibold">
+
+                                            ✏️ Edit
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            <% }) %>
+
+                        </div>
+
+                    <% } %>
+
+                </div>
 
             </div>
 
@@ -131,4 +309,5 @@
     </div>
 
 </body>
+
 </html>

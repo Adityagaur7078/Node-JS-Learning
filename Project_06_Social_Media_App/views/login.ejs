@@ -3,49 +3,92 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Document</title>
+
+    <title>Login</title>
 </head>
 
-<body>
+<body class="bg-zinc-950 text-white">
 
-    <div class="w-full min-h-screen bg-zinc-950 flex items-center justify-center px-5">
+    <!-- Navbar -->
+
+    <nav class="border-b border-zinc-800 bg-zinc-900">
+
+        <div class="max-w-7xl mx-auto flex justify-between items-center px-8 py-5">
+
+            <h1 class="text-3xl font-bold">
+                Mini Social
+            </h1>
+
+            <a
+                href="/"
+                class="bg-zinc-800 hover:bg-zinc-700 transition px-5 py-2 rounded-xl font-semibold">
+
+                Register
+
+            </a>
+
+        </div>
+
+    </nav>
+
+    <!-- Main -->
+
+    <div class="min-h-[88vh] flex items-center justify-center px-5">
 
         <div class="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl p-8 shadow-2xl">
 
-            <h3 class="text-4xl font-bold text-center text-white">
-                Login Account
-            </h3>
+            <h1 class="text-4xl font-bold text-center">
 
-            <p class="text-center text-zinc-400 mt-2 mb-8">
-                Login to get Started
+                Welcome Back 👋
+
+            </h1>
+
+            <p class="text-zinc-400 text-center mt-2 mb-8">
+
+                Login to continue.
+
             </p>
 
-            <form action="/login" method="post" class="space-y-5">
+            <form
+                action="/login"
+                method="POST"
+                class="space-y-5">
 
                 <input
-                    class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition"
-                    type="email" name="email" placeholder="Email Address">
+                    type="email"
+                    name="email"
+                    placeholder="Email Address"
+                    required
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500">
 
                 <input
-                    class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder-zinc-500 outline-none focus:border-blue-500 transition"
-                    type="password" name="password" placeholder="Password">
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required
+                    class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500">
 
                 <button
-                    class="w-full bg-blue-600 hover:bg-blue-700 transition py-3 rounded-xl font-semibold cursor-pointer">
+                    type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-semibold transition cursor-pointer">
 
-                    Login Account
+                    Login
 
                 </button>
 
             </form>
 
-            <p class="text-center text-zinc-400 mt-6">
+            <p class="text-center text-zinc-400 mt-8">
 
                 Don't have an account?
 
-                <a href="/" class="text-blue-500 hover:text-blue-400 font-semibold">
+                <a
+                    href="/"
+                    class="text-blue-500 hover:text-blue-400 font-semibold">
 
                     Create Account
 

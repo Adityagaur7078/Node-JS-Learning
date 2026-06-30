@@ -7,10 +7,12 @@ const app = express();
 
 const userModel = require("./models/user");
 const postModel = require("./models/post");
+const path = require("path");
 
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const upload = require("./config/multerconfig");
 
 
 // ======================================================
@@ -20,6 +22,7 @@ const jwt = require('jsonwebtoken');
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
 
@@ -109,6 +112,27 @@ app.post("/edit/:id", isLoggedIn, async (req, res) => {
     res.redirect("/profile");
 });
 
+// Edit Profile Picture Route
+
+app.get("/profile/upload", isLoggedIn, async (req, res) => {
+
+    const user = await userModel.findOne({
+        email: req.user.email
+    });
+
+    res.render("profileUpload", {
+        user,
+    });
+
+});
+
+app.post("/upload", isLoggedIn, upload.single("profilePic"), async (req, res) => {
+   let user = await userModel.findOne({email: req.user.email});
+   user.profilePic = req.file.filename;
+   await user.save();
+  res.redirect("/profile");
+})
+
 
 // ======================================================
 // POST ROUTES
@@ -145,7 +169,7 @@ app.post('/register', async (req, res) => {
 
             res.cookie("token", token);
 
-            res.send("registered");
+            res.redirect("/profile");
 
         });
 
